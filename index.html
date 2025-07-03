@@ -65,7 +65,7 @@
             opt.textContent = meses[i];
             selectMes.appendChild(opt);
         }
-        for(let i=anoAtual-1; i<=anoAtual+1; i++) {
+        for(let i=2020; i<=2125; i++) {
             const opt = document.createElement('option');
             opt.value = i;
             opt.textContent = i;
@@ -98,7 +98,18 @@
                 const dateStr = `${ano}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
                 const hasEvent = eventos.some(ev => ev.data === dateStr && filterEvent(ev));
                 const el = document.createElement('div');
-                el.className = 'day' + (hasEvent ? ' event' : '');
+                let className = 'day';
+                if (hasEvent) className += ' event';
+                // Destacar o dia atual
+                const hoje = new Date();
+                if (
+                    d === hoje.getDate() &&
+                    mes === hoje.getMonth() &&
+                    ano === hoje.getFullYear()
+                ) {
+                    className += ' today';
+                }
+                el.className = className;
                 el.textContent = d;
                 el.tabIndex = 0;
                 el.setAttribute('aria-label', `Dia ${d} de ${meses[mes]}`);
