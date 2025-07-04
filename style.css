@@ -5,21 +5,42 @@ body {
     min-height: 100vh;
 }
 header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     background: linear-gradient(90deg, #003366 60%, #005fa3 100%);
     color: #fff;
     padding: 2rem 1rem 1.2rem 1rem;
-    text-align: center;
+    text-align: left;
     box-shadow: 0 2px 12px #00336633;
+    position: relative;
+    gap: 1.5rem;
 }
-header h1 {
-    margin: 0 0 0.3em 0;
-    font-size: 2.2rem;
-    letter-spacing: 1px;
+.header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
 }
-header p {
-    margin: 0;
-    font-size: 1.1rem;
-    opacity: 0.9;
+.header-center h1, .header-center p {
+    text-align: center;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+header h1, header p {
+    text-align: center;
+    width: 100%;
+}
+header img {
+    margin-right: 1.5rem;
+    margin-left: 0;
+    display: block;
+    height: 200px;
+    width: 200px;
 }
 .container {
     max-width: 950px;
@@ -223,11 +244,34 @@ header p {
     transform: translateY(-4px) scale(1.025);
     border-color: #005fa3;
 }
+.event-img {
+    width: 100%;
+    max-width: 340px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 0.7em;
+    display: block;
+    box-shadow: 0 2px 8px #00336622;
+}
 @media (max-width: 700px) {
     .container { padding: 0.5rem; }
     .filters { flex-direction: column; gap: 0.7rem; }
     .calendar { font-size: 0.93rem; padding: 0.5rem 0.1rem; }
     .event-item { padding: 0.8rem 0.7rem 0.7rem 2.5rem; }
+    header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    header h1, header p {
+        text-align: center;
+        width: auto;
+    }
+    header img {
+        margin: 0 auto 1rem auto;
+    }
 }
 @media (max-width: 500px) {
     header h1 { font-size: 1.1rem; }
