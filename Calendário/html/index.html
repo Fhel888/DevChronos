@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário Institucional ENIAC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-area">
+            <img src="logo_eniac.png" alt="ENIAC">
+            
+        </div>
+        <div class="header-center">
+            <h1>Calendário Institucional ENIAC</h1>
+            <p>Eventos estratégicos: <span class="tag tech">Tecnologia</span> <span class="tag emp">Empregabilidade</span> <span class="tag health">Saúde</span> <span class="tag integ">Integração</span></p>
+        </div>
+    </header>
+    <div class="container">
+        <div class="calendar-filters-top" style="display:flex;gap:1.5rem;align-items:center;justify-content:center;margin-bottom:1.2rem;">
+            <div>
+                <label for="mes">Mês:</label>
+                <select id="mes"></select>
+            </div>
+            <div>
+                <label for="ano">Ano:</label>
+                <select id="ano"></select>
+            </div>
+        </div>
+        <div class="calendar" id="calendar"></div>
+        <div class="filters">
+            <div>
+                <label for="tipo">Tipo de Evento:</label>
+                <select id="tipo">
+                    <option value="">Todos</option>
+                    <option value="Tecnologia">Tecnologia</option>
+                    <option value="Empregabilidade">Empregabilidade</option>
+                    <option value="Saúde">Saúde</option>
+                    <option value="Integração">Integração</option>
+                </select>
+            </div>
+            <div>
+                <label for="publico">Público-alvo:</label>
+                <select id="publico">
+                    <option value="">Todos</option>
+                    <option value="Alunos">Alunos</option>
+                    <option value="Professores">Professores</option>
+                    <option value="Escolas Parceiras">Escolas Parceiras</option>
+                </select>
+            </div>
+        </div>
+        <div class="event-list" id="event-list"></div>
+    </div>
+    <!-- Modal de novo evento -->
+    <div id="modal-evento" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0008;z-index:1000;align-items:center;justify-content:center;">
+      <form id="form-evento" style="background:#fff;padding:2em 1.5em;border-radius:14px;max-width:350px;width:90vw;box-shadow:0 8px 32px #00336655;display:flex;flex-direction:column;gap:1em;">
+        <h2 style="margin:0 0 0.5em 0;font-size:1.2em;color:#003366;">Novo Evento</h2>
+        <input type="hidden" id="data-evento">
+        <label>Título:<input id="titulo-evento" required maxlength="60" style="width:100%;margin-top:0.2em;"></label>
+        <label>Tipo:
+          <select id="tipo-evento" required>
+            <option value="Tecnologia">Tecnologia</option>
+            <option value="Empregabilidade">Empregabilidade</option>
+            <option value="Saúde">Saúde</option>
+            <option value="Integração">Integração</option>
+          </select>
+        </label>
+        <label>Público:
+          <select id="publico-evento" required>
+            <option value="Alunos">Alunos</option>
+            <option value="Professores">Professores</option>
+            <option value="Escolas Parceiras">Escolas Parceiras</option>
+          </select>
+        </label>
+        <label>Descrição:<textarea id="desc-evento" rows="2" maxlength="200" style="width:100%;margin-top:0.2em;"></textarea></label>
+        <label>Imagem (URL):<input id="img-evento" type="url" placeholder="https://..." style="width:100%;margin-top:0.2em;"></label>
+        <div style="display:flex;gap:1em;justify-content:flex-end;">
+          <button type="button" id="cancelar-evento" style="background:#eee;color:#003366;border:none;padding:0.5em 1.2em;border-radius:6px;">Cancelar</button>
+          <button type="submit" style="background:#005fa3;color:#fff;border:none;padding:0.5em 1.2em;border-radius:6px;">Salvar</button>
+        </div>
+      </form>
+    </div>
+    <!-- Modal de imagem do evento -->
+    <div id="modal-img" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000d;z-index:2000;align-items:center;justify-content:center;">
+      <div style="position:relative;max-width:90vw;max-height:90vh;">
+        <img id="img-modal-src" src="" alt="Imagem do evento" style="max-width:90vw;max-height:80vh;border-radius:12px;box-shadow:0 8px 32px #000a;display:block;">
+        <span id="img-modal-title" style="position:absolute;bottom:0;left:0;right:0;background:rgba(34,40,49,0.85);color:#fff;padding:0.7em 1em;font-size:1.1em;border-radius:0 0 12px 12px;"></span>
+        <button id="fechar-img-modal" style="position:absolute;top:0.5em;right:0.7em;background:#23272b;color:#fff;border:none;font-size:1.5em;border-radius:50%;width:2em;height:2em;cursor:pointer;">&times;</button>
+      </div>
+    </div>
+    <script>
+        // Dados de exemplo (substituir por integração backend futuramente)
+        const eventos = [
+            {
+                titulo: 'Semana de Tecnologia',
+                tipo: 'Tecnologia',
+                publico: 'Alunos',
+                data: '2025-03-15',
+                descricao: 'Palestras e workshops de inovação.',
+                imagem: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                titulo: 'Feira de Empregabilidade',
+                tipo: 'Empregabilidade',
+                publico: 'Alunos',
+                data: '2025-06-10',
+                descricao: 'Conexão com empresas e vagas.',
+                imagem: 'https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                titulo: 'Dia da Saúde',
+                tipo: 'Saúde',
+                publico: 'Professores',
+                data: '2025-09-20',
+                descricao: 'Atividades de bem-estar e saúde.',
+                imagem: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                titulo: 'Integra ENIAC',
+                tipo: 'Integração',
+                publico: 'Escolas Parceiras',
+                data: '2025-12-05',
+                descricao: 'Evento de integração entre escolas.',
+                imagem: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                titulo: 'Semana do Meio Ambiente',
+                tipo: 'Saúde',
+                publico: 'Alunos',
+                data: '2025-06-05',
+                descricao: 'Ações e palestras sobre sustentabilidade.',
+                imagem: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                titulo: 'Hackathon ENIAC',
+                tipo: 'Tecnologia',
+                publico: 'Alunos',
+                data: '2025-08-18',
+                descricao: 'Competição de programação e inovação.',
+                imagem: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                titulo: 'Formatura 2025',
+                tipo: 'Integração',
+                publico: 'Alunos',
+                data: '2025-12-20',
+                descricao: 'Cerimônia de formatura dos concluintes.',
+                imagem: 'https://images.unsplash.com/photo-1517520287167-4bbf64a00d66?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                titulo: 'Encontro de Professores',
+                tipo: 'Integração',
+                publico: 'Professores',
+                data: '2025-10-10',
+                descricao: 'Troca de experiências e capacitação.',
+                imagem: 'https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                titulo: 'Feira de Ciências',
+                tipo: 'Tecnologia',
+                publico: 'Alunos',
+                data: '2025-11-15',
+                descricao: 'Exposição de projetos científicos dos alunos.',
+                imagem: 'https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                titulo: 'Dia da Responsabilidade Social',
+                tipo: 'Empregabilidade',
+                publico: 'Alunos',
+                data: '2025-09-25',
+                descricao: 'Ações sociais e voluntariado.',
+                imagem: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80'
+            }
+        ];
+
+        // Carregar eventos do localStorage (eventos criados pelo usuário)
+        const eventosSalvos = JSON.parse(localStorage.getItem('eventos') || '[]');
+        eventos.push(...eventosSalvos);
+
+        // Preencher selects de mês e ano
+        const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+        const selectMes = document.getElementById('mes');
+        const selectAno = document.getElementById('ano');
+        const anoAtual = new Date().getFullYear();
+        for(let i=0; i<12; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = meses[i];
+            selectMes.appendChild(opt);
+        }
+        for(let i=2020; i<=2125; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = i;
+            selectAno.appendChild(opt);
+        }
+        selectMes.value = new Date().getMonth();
+        selectAno.value = anoAtual;
+
+        // Renderizar calendário
+        function renderCalendar() {
+            const mes = parseInt(selectMes.value);
+            const ano = parseInt(selectAno.value);
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            const firstDay = new Date(ano, mes, 1).getDay();
+            const daysInMonth = new Date(ano, mes+1, 0).getDate();
+            const weekdays = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+            weekdays.forEach(dia => {
+                const el = document.createElement('div');
+                el.className = 'weekday';
+                el.textContent = dia;
+                calendar.appendChild(el);
+            });
+            for(let i=0; i<firstDay; i++) {
+                const empty = document.createElement('div');
+                empty.className = 'day';
+                calendar.appendChild(empty);
+            }
+            for(let d=1; d<=daysInMonth; d++) {
+                const dateStr = `${ano}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const hasEvent = eventos.some(ev => ev.data === dateStr && filterEvent(ev));
+                const el = document.createElement('div');
+                let className = 'day';
+                if (hasEvent) className += ' event';
+                // Destacar o dia atual
+                const hoje = new Date();
+                if (
+                    d === hoje.getDate() &&
+                    mes === hoje.getMonth() &&
+                    ano === hoje.getFullYear()
+                ) {
+                    className += ' today';
+                }
+                el.className = className;
+                el.textContent = d;
+                el.tabIndex = 0;
+                el.setAttribute('aria-label', `Dia ${d} de ${meses[mes]}`);
+                if (hasEvent) {
+                    el.onclick = () => showEvents(dateStr);
+                } else {
+                    el.onclick = null; // Não faz nada ao clicar em dias vazios
+                }
+                calendar.appendChild(el);
+            }
+        }
+
+        // Filtro de eventos
+        function filterEvent(ev) {
+            const tipo = document.getElementById('tipo').value;
+            const publico = document.getElementById('publico').value;
+            if(tipo && ev.tipo !== tipo) return false;
+            if(publico && ev.publico !== publico) return false;
+            const mes = parseInt(selectMes.value);
+            const ano = parseInt(selectAno.value);
+            const data = new Date(ev.data);
+            return data.getMonth() === mes && data.getFullYear() === ano;
+        }
+
+        // Mostrar eventos do dia
+        function showEvents(dateStr) {
+            const lista = document.getElementById('event-list');
+            lista.innerHTML = '';
+            const eventosDia = eventos.filter(ev => ev.data === dateStr && filterEvent(ev));
+            if(eventosDia.length === 0) {
+                lista.innerHTML = '<p>Nenhum evento neste dia.</p>';
+                return;
+            }
+            eventosDia.forEach(ev => {
+                const item = document.createElement('div');
+                item.className = 'event-item';
+                let imgHtml = '';
+                if(ev.imagem) {
+                  imgHtml = `<img src="${ev.imagem}" alt="Imagem do evento" class="event-img" style="cursor:pointer;">`;
+                }
+                item.innerHTML =
+                    imgHtml +
+                    `<strong>${ev.titulo}</strong> <span style="float:right;">${ev.tipo}</span><br><em>${ev.publico}</em><br><small>${ev.data}</small><p>${ev.descricao}</p>`;
+                if(ev.imagem) {
+                  item.querySelector('.event-img').onclick = function(e) {
+                    e.stopPropagation();
+                    imgModalSrc.src = ev.imagem;
+                    imgModalTitle.textContent = ev.titulo;
+                    modalImg.style.display = 'flex';
+                  };
+                }
+                lista.appendChild(item);
+            });
+        }
+
+        // Atualizar lista de eventos do mês
+        function renderEventList() {
+            const lista = document.getElementById('event-list');
+            lista.innerHTML = '';
+            const eventosMes = eventos.filter(filterEvent);
+            if(eventosMes.length === 0) {
+                lista.innerHTML = '<p>Nenhum evento neste mês.</p>';
+                return;
+            }
+            eventosMes.forEach(ev => {
+                const item = document.createElement('div');
+                item.className = 'event-item';
+                item.setAttribute('data-tipo', ev.tipo);
+                let imgHtml = '';
+                if(ev.imagem) {
+                  imgHtml = `<img src="${ev.imagem}" alt="Imagem do evento" class="event-img" style="cursor:pointer;">`;
+                }
+                item.innerHTML =
+                    imgHtml +
+                    `<strong>${ev.titulo}</strong> <span style="float:right;">${ev.tipo}</span><br><em>${ev.publico}</em><br><small>${ev.data}</small><p>${ev.descricao}</p>`;
+                if(ev.imagem) {
+                  item.querySelector('.event-img').onclick = function(e) {
+                    e.stopPropagation();
+                    imgModalSrc.src = ev.imagem;
+                    imgModalTitle.textContent = ev.titulo;
+                    modalImg.style.display = 'flex';
+                  };
+                }
+                lista.appendChild(item);
+            });
+        }
+
+        // Função para abrir modal de novo evento
+        function abrirModalNovoEvento(dataStr) {
+          document.getElementById('modal-evento').style.display = 'flex';
+          document.getElementById('data-evento').value = dataStr;
+          document.getElementById('titulo-evento').value = '';
+          document.getElementById('tipo-evento').value = 'Tecnologia';
+          document.getElementById('publico-evento').value = 'Alunos';
+          document.getElementById('desc-evento').value = '';
+          document.getElementById('img-evento').value = '';
+        }
+        document.getElementById('cancelar-evento').onclick = function() {
+          document.getElementById('modal-evento').style.display = 'none';
+        };
+        document.getElementById('form-evento').onsubmit = function(e) {
+          e.preventDefault();
+          const novoEvento = {
+            titulo: document.getElementById('titulo-evento').value,
+            tipo: document.getElementById('tipo-evento').value,
+            publico: document.getElementById('publico-evento').value,
+            data: document.getElementById('data-evento').value,
+            descricao: document.getElementById('desc-evento').value,
+            imagem: document.getElementById('img-evento').value
+          };
+          eventos.push(novoEvento);
+          // Salvar evento no localStorage
+          localStorage.setItem('eventos', JSON.stringify(eventos));
+          document.getElementById('modal-evento').style.display = 'none';
+          renderCalendar();
+          renderEventList();
+        };
+
+        // Modal de imagem do evento
+        const modalImg = document.getElementById('modal-img');
+        const imgModalSrc = document.getElementById('img-modal-src');
+        const imgModalTitle = document.getElementById('img-modal-title');
+        document.getElementById('fechar-img-modal').onclick = function() {
+          modalImg.style.display = 'none';
+        };
+        modalImg.onclick = function(e) {
+          if (e.target === modalImg) modalImg.style.display = 'none';
+        };
+
+        // Eventos de mudança nos filtros
+        [selectMes, selectAno, document.getElementById('tipo'), document.getElementById('publico')].forEach(el => {
+            el.onchange = () => { renderCalendar(); renderEventList(); };
+        });
+
+        // Inicialização
+        renderCalendar();
+        renderEventList();
+    </script>
+</body>
+</html>
