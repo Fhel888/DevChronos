@@ -1,0 +1,20 @@
+# Ignorar arquivos desnecessários no Docker
+node_modules
+npm-debug.log
+.git
+.gitignore
+README.md
+.env
+.nyc_output
+coverage
+.nyc_output
+.vscode
+.idea
+
+# Ignorar arquivos do Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Ignorar logs
+*.log

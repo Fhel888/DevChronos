@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastre-se</title>
+  <link rel="stylesheet" href="../css/styles_cadastro.css">
+</head>
+<body>
+  <header class="header">
+    <img src="../imagens/logo_eniac.png" alt="ENIAC" />
+    <h1>Cadastro de Usuário</h1>
+  </header>
+
+
+  <main class="container">
+    <form action="#" method="post" onsubmit="return validarCadastro()">
+      <div class="form-group">
+        <input type="text" id="nome" name="nome" placeholder="Nome" required>
+      </div>
+      <div class="form-group">
+        <input type="text" id="ra" name="ra" placeholder="RA" required>
+      </div>
+      <div class="form-group">
+        <select id="curso" name="curso" required>
+          <option value="">Curso</option>
+          <option value="Administracao">Administração</option>
+          <option value="ads">Análise e Desenvolvimento de Sistemas</option>
+          <option value="ArquiteturaUrbanismo">Arquitetura e Urbanismo</option>
+          <option value="Biomedicina">Biomedicina</option>
+          <option value="CienciaComputacao">Ciência da Computação</option>
+          <option value="CienciasContabeis">Ciências Contábeis</option>
+          <option value="ConstrucaoEdificios">Construção de Edifícios</option>
+          <option value="Direito">Direito</option>
+          <option value="EducacaoFisica">Educação Física</option>
+          <option value="EletronicaIndustrial">Eletrônica Industrial</option>
+          <option value="Enfermagem">Enfermagem</option>
+          <option value="EngenhariaAmbiental">Engenharia Ambiental</option>
+          <option value="EngenhariaCivil">Engenharia Civil</option>
+          <option value="EngenhariaComputacao">Engenharia de Computação</option>
+          <option value="EngenhariaControleAutomacao">Engenharia de Controle e Automação</option>
+          <option value="EngenhariaProducao">Engenharia de Produção</option>
+          <option value="EngenhariaSoftware">Engenharia de Software</option>
+          <option value="EngenhariaEletrica">Engenharia Elétrica</option>
+          <option value="EngenhariaIndustrialMecanica">Engenharia Industrial Mecânica</option>
+          <option value="EngenhariaMecatronica">Engenharia Mecatrônica</option>
+          <option value="EsteticaCosmetica">Estética e Cosmética</option>
+          <option value="Farmacia">Farmácia</option>
+          <option value="Fisioterapia">Fisioterapia</option>
+          <option value="Fonoaudiologia">Fonoaudiologia</option>
+          <option value="GestaoAmbiental">Gestão Ambiental</option>
+          <option value="GestaoComercial">Gestão Comercial</option>
+          <option value="GestaoInformacao">Gestão da Informação</option>
+          <option value="GestaoProducaoIndustrial">Gestão da Produção Industrial</option>
+          <option value="GestaoQualidade">Gestão da Qualidade</option>
+          <option value="GestaoFinanceira">Gestão Financeira</option>
+          <option value="GestaoHospitalar">Gestão Hospitalar</option>
+          <option value="GestaoPublica">Gestão Pública</option>
+          <option value="LicenciaturaEducacaoEspecial">Licenciatura em Educação Especial</option>
+          <option value="LicenciaturaEducacaoFisica">Licenciatura em Educação Física</option>
+          <option value="LicenciaturaLetras">Licenciatura em Letras</option>
+          <option value="LicenciaturaPedagogia">Licenciatura em Pedagogia</option>
+          <option value="Logistica">Logística</option>
+          <option value="ManutencaoIndustrial">Manutenção Industrial</option>
+          <option value="Marketing">Marketing</option>
+          <option value="Medicina">Medicina</option>
+          <option value="MecatronicaIndustrial">Mecatrônica Industrial</option>
+          <option value="Nutricao">Nutrição</option>
+          <option value="Odontologia">Odontologia</option>
+          <option value="ProcessosGerenciais">Processos Gerenciais</option>
+          <option value="Psicologia">Psicologia</option>
+          <option value="RecursosHumanos">Recursos Humanos</option>
+          <option value="SegurancaTrabalho">Segurança do Trabalho</option>
+          <option value="ServicoSocial">Serviço Social</option>
+          <option value="SistemasInformacao">Sistemas de Informação</option>
+          <option value="TecnologiaGestaoComercial">Tecnologia em Gestão Comercial</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <input type="email" id="email" name="email" placeholder="E-mail" required>
+      </div>
+      <div class="form-group">
+        <input type="password" id="senha" name="senha" placeholder="Senha" required>
+      </div>
+      <button class="btn" type="submit">Cadastrar</button>
+    </form>
+  </main>
+
+
+  <script>
+  function validarCadastro() {
+      const nome = document.getElementById('nome').value.trim();
+      const ra = document.getElementById('ra').value.trim();
+      const curso = document.getElementById('curso').value;
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+
+
+      if (!nome || !ra || !curso || !email || !senha) {
+          alert('Preencha todos os campos.');
+          return false;
+      }
+
+
+      if (senha.length < 6) {
+          alert('A senha deve ter pelo menos 6 caracteres.');
+          return false;
+      }
+
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+          alert('Insira um e-mail válido.');
+          return false;
+      }
+
+
+      return true;
+  }
+  </script>
+</body>
+</html>

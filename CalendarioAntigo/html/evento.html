@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Tela do Evento</title>
+  <link rel="stylesheet" href="../css/styles_evento.css">
+</head>
+<body>
+  <header class="header">
+    <img src="../imagens/logo_eniac.png" alt="ENIAC Logo" class="logo">
+    <h1 class="titulo-pagina">Tela do Evento</h1>
+  </header>
+
+  <main class="container">
+    <section class="info-evento" id="evento">
+      <h2 class="titulo-evento" id="titulo-evento">Nome do evento</h2><br>
+      <div class="campo">
+        <p class="label">Data e horário</p>
+        <p id="data-horario">07 de julho de 2025, 09:00–17:00</p>
+      </div>
+      <br>
+      <div class="campo">
+        <p class="label">Categoria</p>
+        <p id="categoria">Tecnologia</p>
+      </div>
+      <br>
+      <div class="campo">
+        <p class="label">Público-alvo</p>
+        <p id="publico">Alunos</p>
+      </div>
+      <br>
+
+      <div class="descricao">
+        <div class="label">Descrição</div>
+        <p id="descricao">
+          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </p>
+      </div>
+    </section>
+
+    <section class="imagem-botoes">
+      <div class="imagem">
+        <img src="../imagens/evento_tecnologia.png" alt="Imagem do evento">
+      </div>
+
+
+
+
+      <div class="botoes-lado-a-lado">
+        <button class="botao botao-editar" onclick="editarEvento()">Editar evento</button>
+        <button class="botao botao-excluir" onclick="excluirEvento()">Excluir evento</button>
+      </div>
+    </section>
+  </main>
+
+
+
+
+  <script>
+    function editarEvento() {
+      const novoTitulo = prompt("Novo nome do evento:", document.getElementById('titulo-evento').textContent);
+      const novaData = prompt("Nova data e horário:", document.getElementById('data-horario').textContent);
+      const novaCategoria = prompt("Nova categoria:", document.getElementById('categoria').textContent);
+      const novoPublico = prompt("Novo público-alvo:", document.getElementById('publico').textContent);
+      const novaDescricao = prompt("Nova descrição:", document.getElementById('descricao').textContent);
+
+
+
+
+      if (novoTitulo && novaData && novaCategoria && novoPublico && novaDescricao) {
+        document.getElementById('titulo-evento').textContent = novoTitulo;
+        document.getElementById('data-horario').textContent = novaData;
+        document.getElementById('categoria').textContent = novaCategoria;
+        document.getElementById('publico').textContent = novoPublico;
+        document.getElementById('descricao').textContent = novaDescricao;
+        alert("Evento atualizado com sucesso!");
+      } else {
+        alert("Todos os campos devem ser preenchidos.");
+      }
+    }
+
+
+
+
+    function excluirEvento() {
+      const confirmar = confirm("Tem certeza que deseja excluir este evento?");
+      if (confirmar) {
+      document.getElementById('evento').remove();
+      document.querySelector('.imagem-botoes').remove();
+      alert("Evento excluído com sucesso!");
+      }
+    }
+  </script>
+</body>
+</html>

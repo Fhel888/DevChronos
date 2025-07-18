@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../css/styles_login.css">
+</head>
+<body>
+    <div class="login-container">
+        <img src="../imagens/logo_eniac.png" alt="Logo Eniac" class="logo">
+        <h2>Calendário de Eventos</h2>
+
+        <form class="login-form" method="POST" onsubmit="return validarLogin()">
+            <input type="email" id="email" placeholder="E-mail" required>
+            <input type="password" id="senha" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+
+
+        <p class="signup-link">
+            Não possui uma conta? <a href="cadastro.html">Cadastre-se</a>
+        </p>
+    </div>
+
+
+    <script>
+    function validarLogin() {
+        const email = document.getElementById('email').value.trim();
+        const senha = document.getElementById('senha').value.trim();
+
+
+        if (email === '' || senha === '') {
+            alert('Preencha todos os campos.');
+            return false;
+        }
+
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Insira um e-mail válido.');
+            return false;
+        }
+
+
+        return true;
+    }
+    </script>
+</body>
+</html>

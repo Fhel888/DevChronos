@@ -1,0 +1,55 @@
+services:
+  # Serviço do Calendário (Nginx)
+  calendario:
+    build: .
+    image: devchronos
+    ports:
+      - "8080:80"
+    container_name: calendario-institucional
+    depends_on:
+      - mysql
+    networks:
+      - eniac_network
+
+  # Serviço do MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-eniac
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: eniac123
+      MYSQL_DATABASE: calendario_eniac
+      MYSQL_USER: eniac_user
+      MYSQL_PASSWORD: eniac_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - eniac_network
+
+  # Serviço do phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin-eniac
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: eniac123
+      MYSQL_ROOT_PASSWORD: eniac123
+    depends_on:
+      - mysql
+    networks:
+      - eniac_network
+
+volumes:
+  mysql_data:
+
+networks:
+  eniac_network:
+    driver: bridge

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário Institucional - Faculdade ENIAC</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Banner ENIAC -->
+    <div class="top-banner">
+        <div class="banner-content">
+            <div class="logo-container">
+                <img src="logo_eniac.png" alt="Logo ENIAC" class="logo-eniac">
+            </div>
+            <h1 class="banner-title">Calendário Institucional ENIAC</h1>
+            <div class="banner-spacer"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-calendar-alt"></i>Painel Administrativo</h1>
+                <div class="admin-controls" id="adminControls">
+                    <button class="btn-admin" id="loginBtn">Login</button>
+                    <button class="btn-admin hidden" id="logoutBtn">Logout</button>
+                    <button class="btn-primary hidden" id="createEventBtn">
+                        <i class="fas fa-plus"></i> Criar Evento
+                    </button>
+                    <button class="btn-danger hidden" id="clearAllEventsBtn">
+                        <i class="fas fa-trash-alt"></i> Limpar Todos
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navegação do Calendário -->
+        <div class="calendar-nav">
+            <div class="nav-controls">
+                <button class="nav-btn" id="prevMonth">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="date-selectors">
+                    <select id="monthSelect" class="date-select">
+                        <option value="0">Janeiro</option>
+                        <option value="1">Fevereiro</option>
+                        <option value="2">Março</option>
+                        <option value="3">Abril</option>
+                        <option value="4">Maio</option>
+                        <option value="5">Junho</option>
+                        <option value="6">Julho</option>
+                        <option value="7">Agosto</option>
+                        <option value="8">Setembro</option>
+                        <option value="9">Outubro</option>
+                        <option value="10">Novembro</option>
+                        <option value="11">Dezembro</option>
+                    </select>
+                    <select id="yearSelect" class="date-select"></select>
+                </div>
+                <button class="nav-btn" id="nextMonth">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <div class="view-controls">
+                <button class="view-btn active" data-view="monthly">
+                    <i class="fas fa-calendar"></i> Mensal
+                </button>
+                <button class="view-btn" data-view="quarterly">
+                    <i class="fas fa-th"></i> Trimestral
+                </button>
+                <button class="view-btn" data-view="list">
+                    <i class="fas fa-list"></i> Lista
+                </button>
+            </div>
+        </div>
+
+        <!-- Calendário -->
+        <div class="calendar-container">
+            <!-- Visualização Mensal -->
+            <div class="calendar-view" id="monthlyView">
+                <div class="calendar-header">
+                    <div class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div class="weekday">Sáb</div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+            </div>
+
+            <!-- Visualização Trimestral -->
+            <div class="calendar-view hidden" id="quarterlyView">
+                <div class="quarterly-container">
+                    <div class="mini-calendar" id="prevMonthCalendar"></div>
+                    <div class="mini-calendar current" id="currentMonthCalendar"></div>
+                    <div class="mini-calendar" id="nextMonthCalendar"></div>
+                </div>
+            </div>
+
+            <!-- Visualização Lista -->
+            <div class="calendar-view hidden" id="listView">
+                <div class="list-container" id="listContainer"></div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filters-container">
+            <h3><i class="fas fa-filter"></i> Filtros</h3>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="tipoEventoFilter">Tipo de Evento:</label>
+                    <select id="tipoEventoFilter" class="filter-select">
+                        <option value="">Todos</option>
+                        <option value="tecnologia">Tecnologia</option>
+                        <option value="empregabilidade">Empregabilidade</option>
+                        <option value="saude">Saúde</option>
+                        <option value="integracao">Integração</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="publicoAlvoFilter">Público-alvo:</label>
+                    <select id="publicoAlvoFilter" class="filter-select">
+                        <option value="">Todos</option>
+                        <option value="alunos">Alunos</option>
+                        <option value="professores">Professores</option>
+                        <option value="escolas-parceiras">Escolas Parceiras</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="periodoFilter">Período:</label>
+                    <select id="periodoFilter" class="filter-select">
+                        <option value="">Todos</option>
+                        <option value="manha">Manhã</option>
+                        <option value="tarde">Tarde</option>
+                        <option value="noite">Noite</option>
+                        <option value="integral">Integral</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Eventos Destacados -->
+        <div class="destacados-container" id="destacadosContainer">
+            <h3><i class="fas fa-star"></i> Eventos em Destaque</h3>
+            <div class="destacados-grid" id="destacadosGrid"></div>
+        </div>
+
+        <!-- Lista de Eventos -->
+        <div class="eventos-container">
+            <h3><i class="fas fa-calendar-check"></i> Eventos do Período</h3>
+            <div class="eventos-lista" id="eventosLista">
+                <p class="no-events">Nenhum evento encontrado para este período.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div class="modal hidden" id="loginModal">
+        <div class="modal-content">
+            <span class="close" id="closeLogin">&times;</span>
+            <h2>Login Administrativo</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Usuário:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Evento -->
+    <div class="modal hidden" id="eventoModal">
+        <div class="modal-content">
+            <span class="close" id="closeEvento">&times;</span>
+            <h2 id="eventoModalTitle">Detalhes do Evento</h2>
+            <form id="eventoForm">
+                <div class="form-group">
+                    <label for="eventoTitulo">Título:</label>
+                    <input type="text" id="eventoTitulo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventoDescricao">Breve Descrição:</label>
+                    <textarea id="eventoDescricao" rows="3" placeholder="Descrição resumida que aparecerá na listagem de eventos"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventoDescricaoCompleta">Descrição:</label>
+                    <textarea id="eventoDescricaoCompleta" rows="5" placeholder="Descrição completa que aparecerá apenas no detalhamento do evento"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventoImagem">Imagem do Evento:</label>
+                    <input type="file" id="eventoImagem" accept="image/*">
+                    <div class="image-preview" id="imagemPreview" style="display: none;">
+                        <img id="imagemPreviewImg" style="max-width: 200px; max-height: 200px; border-radius: 8px; margin-top: 10px;">
+                        <button type="button" class="btn-secondary" id="removerImagem" style="margin-top: 10px;">Remover Imagem</button>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventoData">Data:</label>
+                        <input type="date" id="eventoData" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventoHora">Hora:</label>
+                        <input type="time" id="eventoHora" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventoTipo">Tipo:</label>
+                        <select id="eventoTipo" required>
+                            <option value="">Selecione...</option>
+                            <option value="tecnologia">Tecnologia</option>
+                            <option value="empregabilidade">Empregabilidade</option>
+                            <option value="saude">Saúde</option>
+                            <option value="integracao">Integração</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventoPublico">Público-alvo:</label>
+                        <select id="eventoPublico" required>
+                            <option value="">Selecione...</option>
+                            <option value="todos">Todos</option>
+                            <option value="alunos">Alunos</option>
+                            <option value="professores">Professores</option>
+                            <option value="escolas-parceiras">Escolas Parceiras</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventoPeriodo">Período:</label>
+                        <select id="eventoPeriodo" required>
+                            <option value="">Selecione...</option>
+                            <option value="manha">Manhã</option>
+                            <option value="tarde">Tarde</option>
+                            <option value="noite">Noite</option>
+                            <option value="integral">Integral</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventoLocal">Local:</label>
+                        <input type="text" id="eventoLocal" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="eventoDestaque"> Evento em destaque
+                    </label>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="saveEventBtn">Salvar</button>
+                    <button type="button" class="btn-danger hidden" id="deleteEventBtn">Excluir</button>
+                    <button type="button" class="btn-secondary" id="cancelEventBtn">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização de Evento -->
+    <div class="modal hidden" id="eventoDetalhesModal">
+        <div class="modal-content">
+            <span class="close" id="closeEventoDetalhes">&times;</span>
+            <h2 id="eventoDetalhesTitle">Detalhes do Evento</h2>
+            <div class="evento-detalhes-content">
+                <div id="eventoDetalhesImagem" class="evento-detalhes-imagem" style="display: none;">
+                    <img id="eventoDetalhesImg" alt="Imagem do evento">
+                </div>
+                <div class="evento-detalhes-info">
+                    <h3 id="eventoDetalhesTitulo"></h3>
+                    <div class="evento-detalhes-meta">
+                        <div class="detail-item">
+                            <i class="fas fa-calendar"></i>
+                            <span id="eventoDetalhesData"></span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="eventoDetalhesHora"></span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="eventoDetalhesLocal"></span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-tag"></i>
+                            <span id="eventoDetalhesTipo"></span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-users"></i>
+                            <span id="eventoDetalhesPublico"></span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-sun"></i>
+                            <span id="eventoDetalhesPeriodo"></span>
+                        </div>
+                    </div>
+                    <div class="evento-detalhes-descricoes">
+                        <div id="eventoDetalhesBreveDescricao" style="display: none;">
+                            <h4>Resumo</h4>
+                            <p id="eventoDetalhesBreveDescricaoTexto"></p>
+                        </div>
+                        <div id="eventoDetalhesDescricaoCompleta" style="display: none;">
+                            <h4>Descrição</h4>
+                            <p id="eventoDetalhesDescricaoCompletaTexto"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

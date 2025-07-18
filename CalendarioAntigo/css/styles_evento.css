@@ -1,0 +1,187 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9fafb;
+  color: #333;
+}
+
+
+.header {
+  position: relative;
+  background-color: #FFFFFF;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  margin-bottom: 35px;
+}
+
+
+.header h1 {
+  font-size: 22px;
+  color: #004161;
+  font-weight: 600;
+  margin: 0;
+}
+
+
+.logo {
+  position: absolute;
+  left: 16px;
+  height: 40px;
+}
+
+
+.titulo-pagina {
+  font-size: 20px;
+  font-weight: bold;
+  color: #004B6B;
+}
+
+
+.container {
+  max-width: 1200px;
+  margin: 30px auto;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+
+.info-evento {
+  margin-left: -100px;
+}
+
+
+.titulo-evento {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+
+.campo {
+  margin-bottom: 16px;
+}
+
+
+.label {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+
+.imagem-botoes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 100px;
+}
+
+
+.imagem {
+  width: 110%;
+  height: auto;
+  margin-bottom: 16px;
+}
+
+
+.imagem img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+
+.botoes-lado-a-lado {
+  display: flex;
+  justify-content: space-between;
+  width: 110%;
+}
+
+
+.botao {
+  padding: 15px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+
+.botao-editar {
+  background-color: #2C3B48;
+  width: 45%;
+}
+
+
+.botao-editar:hover {
+  background-color: #1e2d3b;
+}
+
+
+.botao-excluir {
+  background-color: #EF5350;
+  width: 45%;
+}
+
+
+.botao-excluir:hover {
+  background-color: #c0392b;
+}
+
+
+.descricao {
+  grid-column: span 1;
+}
+
+
+.descricao textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  font-size: 14px;
+}
+
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    margin: 20px;
+  }
+
+
+  .info-evento {
+    margin-left: 0;
+  }
+
+
+  .imagem-botoes {
+    padding-left: 0;
+    align-items: center;
+  }
+
+
+  .botoes-lado-a-lado {
+    flex-direction: column;
+    width: 100%;
+  }
+
+
+  .botao {
+    width: 100%;
+  }
+}
